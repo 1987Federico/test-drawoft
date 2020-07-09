@@ -23,8 +23,13 @@ class userRepository {
     update(body) {
         const {name,lastName,brithday,dni,id } = body;
         return this.dao.run(
-          `UPDATE user SET name = ? WHERE id = ?`,
-          [name, id]
+            ` UPDATE user SET 
+              name = COALESCE(?,name), 
+              lastName = COALESCE(?,lastName), 
+              brithday = COALESCE(?,brithday),
+              dni =  COALESCE(?,dni)
+              WHERE id = ?`,
+          [name ,lastName , brithday,dni ,id]
         )
     };
 

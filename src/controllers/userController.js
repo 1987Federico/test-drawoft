@@ -12,10 +12,9 @@ app.get("/user/:id", async (req, res) => {
         
         if (!result) {
             res.status(400).json({
-                ok:true,
-                err:{
-                    message: 'user not found'
-                }
+                ok:false,
+                message: 'user not found',
+                severity: "LOW"
             });
         }; 
         
@@ -26,7 +25,8 @@ app.get("/user/:id", async (req, res) => {
     } catch (e){
         return res.status(500).json({
             ok:false,
-            e
+            message: 'userInternal server error',
+            severity: "Hig"
         })
     };
 });
@@ -38,10 +38,9 @@ app.get('/user',async(req,res) => {
         result = await userRepository.getFilter(req.query);
         if (!result) {
             res.status(400).json({
-                ok:true,
-                err:{
-                    message: 'users not found'
-                }
+                ok:false,
+                message: 'user not found',
+                severity: "LOW"
             });
         }; 
         res.json({
@@ -51,7 +50,8 @@ app.get('/user',async(req,res) => {
     } catch (e){
         return res.status(500).json({
             ok:false,
-            e
+            message: 'userInternal server error',
+            severity: "Hig"
         })
     };
 });
@@ -69,51 +69,47 @@ app.post('/user',async(req,res) => {
     } catch(e){
         return res.status(500).json({
             ok:false,
-            e
+            message: 'userInternal server error',
+            severity: "Hig"
         })
     }
 });
 
 app.put('/users/:id',async (req,res) => {
     let id = req.params.id;
+    
     try {
-        let user = await userRepository.getById(id);
-        if (user != null && user != {}){
-            let body = getBody(user,req.body);
-            let result = await userRepository.update(body);
-            if (result){
-                return res.json({
-                    ok:true,
-                    result
-                })
-            }
-        };
+        let result = await userRepository.update({...req.body,...req.params});
+        if (result){
+            return res.json({
+                ok:true,
+                result
+            })
+        }
+        //};
         return res.status(400).json({
             ok:false,
-            err:{
-                message:'usuario not found'
-            }
+            message: 'user not found',
+            severity: "LOW"
         });
     } catch(e){
         return res.status(500).json({
             ok:false,
-            e
+            message: 'userInternal server error',
+            severity: "Hig"
         }) 
     };
 });
 
 app.delete('/user/:id',async (req,res) => {
     let id = req.params.id;
-
     try {
         let result = await userRepository.delete(id);
-        
         if (!result) {
             res.status(400).json({
-                ok:true,
-                err:{
-                    message: 'user not found'
-                }
+                ok:false,
+                message: 'user not found',
+                severity: "LOW"
             });
         }; 
         
@@ -124,7 +120,8 @@ app.delete('/user/:id',async (req,res) => {
     } catch (e){
         return res.status(500).json({
             ok:false,
-            e
+            message: 'userInternal server error',
+            severity: "Hig"
         })
     };
     
