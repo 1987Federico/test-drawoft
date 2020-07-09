@@ -1,0 +1,346 @@
+openapi: 3.0.0
+info:
+  title: test Drawoft
+  description: test Drawoft
+  contact:
+    email: federicomatias.aguero1987@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: 3.0.0
+servers:
+  - url: 'http://{enviroment}'
+    variables:
+      bassePath:
+        enum: 
+          - 'api'
+        default: 'api'
+      enviroment:
+        default: 'localhost:3000'
+        enum: 
+          - 'localhost:3000'
+paths:
+  /user:
+    post:
+      tags:
+        - drawoft
+      summary: Create a new user
+      description: Post new user
+      operationId: create_User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/create_user'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/create_user_200'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bad_request_400'
+        '500':
+          description: Bussines error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response_500'
+  /user/{id}:
+    get:
+      tags:
+        - drawoft
+      summary: 'returns the information of a user ,'
+      description: 'Will return information to id,'
+      operationId: 'get_user_by_id,'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          description: 'is the id return a user'
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_user_by_id_200'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bad_request_400'
+        '500':
+          description: Bussines error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response_500'
+  /userss/{id}:
+    delete:
+      tags:
+        - drawoft
+      summary: 'remove a user ,'
+      description: 'remove information to id,'
+      operationId: 'delete_user'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          description: 'is the id return a user'
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/delete_user_200'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bad_request_400'
+        '500':
+          description: Bussines error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response_500'
+  /users:
+    get:
+      tags:
+        - user
+      summary: 'returns the information of all users or by filter ,'
+      description: 'Will return information by birthday or name,'
+      operationId: 'get_user_filter'
+      parameters:
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: brithdaySince
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: brithdayUntil
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: brithdayHigher
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: brithdayLess
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_user_filter_200'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bad_request_400'
+        '500':
+          description: Bussines error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response_500'
+  /users/{id}:
+    put:
+      tags:
+        - user
+      summary: 'update user'
+      operationId: 'update_user'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/update_user'
+        required: true
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          description: 'user id to modify'
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/update_user_200'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bad_request_400'
+        '500':
+          description: Bussines error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_response_500'
+    
+components:
+  schemas:
+    bad_request_400:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: bad Request.
+        severity:
+          type: string
+          example: LOW
+    error_response_500:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: Internal server error
+        severity:
+          type: string
+          example: HIGH
+    create_user_200:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          example: true
+        id:
+          type: integer
+    get_user_by_id_200:
+      type: object 
+      properties:
+        id:
+          type: integer
+          example: 124
+        name: 
+          type: string
+          example: fede
+        lastName: 
+          type: string 
+          example: Aguero
+        birthday:
+          type: string
+          example: 1985-07-28,
+        dni:
+          type: integer
+          example: 4578963
+    create_user:
+      type: object
+      properties:
+        name:
+          type: string
+          example: fede
+        lastName: 
+          type: string
+          example: aguero
+        birthday:
+          type: string
+          example: 1987-0828 
+        dni: 
+          type: integer
+          example: 33223147
+      required: 
+      - name
+      - lastName
+      - birthday
+      - dni
+    get_user_filter_200:
+      type: array
+      items:
+        $ref: '#/components/schemas/get_user_filter_200_item'
+    get_user_filter_200_item:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 124
+        name: 
+          type: string
+          example: fede
+        lastName: 
+          type: string 
+          example: Aguero
+        birthday:
+          type: string
+          example: 1985-07-28,
+        dni:
+          type: integer
+          example: 4578963
+    
+    update_user:
+      type: object
+      properties:
+        name: 
+          type: string
+          example: fede
+        lastName: 
+          type: string 
+          example: Aguero
+        birthday:
+          type: string
+          example: 1985-07-28,
+        dni:
+          type: integer
+          example: 4578963
+    update_user_200:
+      type: object
+      properties:
+        ok: 
+          type: boolean
+          example: true
+        id: 
+          type: integer
+          example: 123
+    delete_user_200:
+      type: object
+      properties:
+        ok: 
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: 'remove user succes'
+    
